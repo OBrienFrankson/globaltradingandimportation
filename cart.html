@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <img src="images/welcome.jpg" alt="Welcome Image" class="welcome-img">
+        </div>
+        <a href="products.html" class="view-products">Back to Products</a>
+    </nav>
+
+    <!-- Cart Content -->
+    <h1>Your Cart</h1>
+    <div id="cartItems" class="cart-items">
+        <!-- Cart items will be dynamically inserted here -->
+    </div>
+
+    <!-- Total Price -->
+    <div id="totalPrice">
+        <h3>Total: ₵<span id="totalAmount">0</span></h3>
+    </div>
+
+    <!-- Buttons Section -->
+    <div class="cart-buttons">
+        <button id="clearCart" class="clear-cart">Clear Cart</button>
+        <a href="checkout.html" class="proceed-button">Proceed to Buy</a>
+        <a href="home.html" class="home-button">Back to Homepage</a>
+    </div>
+
+    <!-- Script to Handle Cart -->
+    <script>
+        function displayCart() {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const cartItemsContainer = document.getElementById("cartItems");
+            const totalAmountElement = document.getElementById("totalAmount");
+
+            cartItemsContainer.innerHTML = "";
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = "<p>Your cart is empty</p>";
+                totalAmountElement.innerText = "0";
+                return;
+            }
+
+            let total = 0;
+
+            cart.forEach(item => {
+                const cartItem = document.createElement("div");
+                cartItem.classList.add("cart-item");
+
+                cartItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>Price: ₵${item.price}</p>
+                    </div>
+                `;
+
+                cartItemsContainer.appendChild(cartItem);
+                total += parseFloat(item.price);
+            });
+
+            totalAmountElement.innerText = total.toFixed(2);
+        }
+
+        document.getElementById("clearCart").addEventListener("click", function() {
+            localStorage.removeItem("cart");
+            displayCart();
+        });
+
+        displayCart();
+    </script>
+</body>
+</html>
